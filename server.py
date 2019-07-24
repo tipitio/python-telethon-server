@@ -47,30 +47,30 @@ async def index():
 
     ## if the client is already defined don't reload
     try:
-      client
+        client
     except NameError:
-      client = await TelegramClient('session_name', api_id, api_hash).start()
+       client = await TelegramClient('session_name', api_id, api_hash).start()
     else:
-      print("client is defined")
+        print("client is defined")
 
-    jsonOut = '{ '
+    jsonOut = {
+        "tipToUserName": str(tipToUserName),
+        "tipFromID": str(tipFromID),
+        "telegramGroupID": str(telegramGroupID),
+        "tipFromUserName": str(tipFromUserName),
+        "tipAmount": str(tipAmount),
+        "tipToken": str(tipToken),
+        "memo": str(memo),
+        "tokenID": str(tokenID)
+    }
 
     try:
         full = await client(GetFullUserRequest(str(tipToUserName)))
         userID = full.user.id
-        jsonOut += '"userID" : "' + str(userID) + '", '
+        jsonOut.update({"userID": str(userID)})
     except:
         userID = None
-
-    jsonOut += ' "tipToUserName" : "' + str(tipToUserName) + '", '
-    jsonOut += ' "tipFromID" : "' + str(tipFromID) + '", '
-    jsonOut += ' "telegramGroupID" : "' + str(telegramGroupID) + '", '
-    jsonOut += ' "tipFromUserName" : "' + str(tipFromUserName) + '", '
-    jsonOut += ' "tipAmount" : "' + str(tipAmount) + '", '
-    jsonOut += ' "tipToken" : "' + str(tipToken) + '", '
-    jsonOut += ' "memo" : "' + str(memo) + '", '
-    jsonOut += ' "tokenID" : "' + str(tokenID) + '" '
-    jsonOut += ' }'
-    return jsonOut
+    
+    return json.dumps(jsonOut)
 
 app.run(port=5000, host='0.0.0.0')
