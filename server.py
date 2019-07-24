@@ -67,7 +67,7 @@ async def index():
     try:
         full = await client(GetFullUserRequest(str(tipToUserName)))
         userID = full.user.id
-        jsonOut.update("userID": str(userID))
+        jsonOut.update({"userID": str(userID)})
     except:
         userID = None
     
